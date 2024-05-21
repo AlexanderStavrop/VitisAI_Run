@@ -1,6 +1,16 @@
 # With scripts
 1. Run the first script (model directory - dataset - board test dataset - Docker)
-
+```
+./automate_shit.sh 32
+```
+2. Activate conda
+```
+conda activate vitis-ai-pytorch
+```
+3. 
+```
+./automate_shit_2.sh 32
+```
 # By the hand
 1. Get into VitisAI directory
 ```
