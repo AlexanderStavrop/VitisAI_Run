@@ -2,7 +2,7 @@
 ```
 cd ~/Documents/VitisAI/Vitis-AI
 ```
-2. Start the VitisAI docker image 
+2. Start the VitisAI docker image
 ```
 sudo ./docker_run.sh xilinx/vitis-ai-pytorch-cpu:latest
 ```
@@ -66,7 +66,7 @@ cp -r dataset/cifar10/val board/cifar10/test
 ```
 18. Make the test tar zip
 ```
-tar -cvf test.tar dataset/cifar10/test/
+tar -cvf test.tar board/cifar10/test
 ```
 17. Zip the board directory
 ```
