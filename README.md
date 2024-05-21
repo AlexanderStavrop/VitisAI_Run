@@ -23,7 +23,7 @@ cp -r ~/Desktop/template/ models/ResNet20_32x32_fake
 ```
 3. Create the cifar10 and test data
 ```
-python3 image_generator.py
+python3 image_generator.py 32
 ```
 4. Start the VitisAI docker image
 ```
@@ -35,7 +35,7 @@ conda activate vitis-ai-pytorch
 ```
 6. Change to the target directory
 ```
-cd models/ResNet20_
+cd models/ResNet20_32x32_fake
 ```
 7. Make sure the needed files are in the target directory
 inside ResNet20 directory
@@ -73,69 +73,53 @@ exit
 ```
 16. Move into the ResNet directory
 ```
-cd models/ResNet20_
+cd models/ResNet20_32x32_fake
 ```
-17. Move the board folder in the ResNet directory
-```
-cp -r ~/Desktop/board .
-```
-18. Move it to the board directory
+17. Move it to the board directory
 ```
 cp resnet20CIFAR.xmodel board/cifar10/
 ```
-19. Create a test subdir in the cifar directory
+18. Create a test subdir in the cifar directory
 ```
 cp -r dataset/cifar10/val board/cifar10/test
 ```
-20. Move into the board/cifar directory
-```
-cd board/cifar10/
-```
-21. Make the test tar zip
-```
-tar -cvf test.tar test
-```
-22. Move back to the main directory
-```
-cd ../../
-```
-23. Zip the board directory
+19. Zip the board directory
 ```
 zip -r board_32x32.zip board/
 ```
-24. Send the file over to cheetera
+20. Send the file over to cheetera
 ```
 scp board_32x32.zip alex@cheetara.microlab.ntua.gr:~/Desktop/
 ```
-25. Connect to cheetara
+21. Connect to cheetara
 ```
 ssh alex@cheetara.microlab.ntua.gr
 ```
-26. Send files to versal
+22. Send files to versal
 ```
 scp ~/Desktop/board_32x32.zip root@192.168.1.51:~/astavropoulos/
 ```
-27. Connect to Versal 
+23. Connect to Versal 
 ```
 ssh root@192.168.1.51
 ```
-28. Get into my directory
+24. Get into my directory
 ```
 cd astavropoulos
 ```
-29. Unzip the zip
+25. Unzip the zip
 ```
 unzip board_32x32.zip
 ```
-30. Change to the board directory
+26. Change to the board directory
 ```
 cd board
 ```
-31. make _run_src.sh_
+27. make _run_src.sh_
 ```
 chmod +x run_src.sh
 ```
-32. Run the model
+28. Run the model
 ```
 ./run_src.sh vck190 resnet20CIFAR
 ```
