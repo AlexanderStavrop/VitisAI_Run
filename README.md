@@ -57,12 +57,12 @@ vai_c_xir -x quantize_result/CifarResNet_int.xmodel -a /opt/vitis_ai/compiler/ar
 
 13. Move it to the board directory
 ```
-zip -r board.zip board/
+zip -r board_32x32.zip board/
 ```
 
 14. Send the file over to cheetera
 ```
-scp board.zip alex@cheetara.microlab.ntua.gr:~/Desktop/
+scp board_32x32.zip alex@cheetara.microlab.ntua.gr:~/Desktop/
 ```
 
 15. Connect to cheetara
@@ -72,10 +72,26 @@ ssh alex@cheetara.microlab.ntua.gr
 
 16. Send files to versal
 ```
-scp ~/Desktop/board.zip root@192.168.1.51:~/astavropoulos/
+scp ~/Desktop/board_32x32.zip root@192.168.1.51:~/astavropoulos/
 ```
 
 15. Connect to Versal 
 ```
-ssh alex@192.168.1.51
+ssh root@192.168.1.51
 ```
+
+16. Get into my directory
+```
+cd astavropoulos
+```
+
+17. Unzip the zip
+```
+unzip board_32x32.zip
+```
+
+18. Change to the board directory
+```
+cd board
+```
+
