@@ -52,3 +52,30 @@ source $install_path/environment-setup-cortexa72-cortexa53-xilinx-linux
 ```
 vai_c_xir -x quantize_result/CifarResNet_int.xmodel -a /opt/vitis_ai/compiler/arch/DPUCVDX8G/VCK190/arch.json -o ./ -n resnet20CIFAR
 ```
+
+12. Make sure there exists a _resnet20CIFAR.xmodel_ in the outer directory
+
+13. Move it to the board directory
+```
+zip -r board.zip board/
+```
+
+14. Send the file over to cheetera
+```
+scp board.zip alex@cheetara.microlab.ntua.gr:~/Desktop/
+```
+
+15. Connect to cheetara
+```
+ssh alex@cheetara.microlab.ntua.gr
+```
+
+16. Send files to versal
+```
+scp ~/Desktop/board.zip root@192.168.1.51:~/astavropoulos/
+```
+
+15. Connect to Versal 
+```
+ssh alex@192.168.1.51
+```
