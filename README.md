@@ -64,47 +64,55 @@ cp resnet20CIFAR.xmodel board/cifar10/
 ```
 cp -r dataset/cifar10/val board/cifar10/test
 ```
-18. Make the test tar zip
+18. Move into the board/cifar directory
+```
+cd board/cifar10/
+```
+19. Make the test tar zip
 ```
 tar -cvf test.tar board/cifar10/test
 ```
-17. Zip the board directory
+20. Move back to the main directory
+```
+cd ../../
+```
+20. Zip the board directory
 ```
 zip -r board_32x32.zip board/
 ```
-18. Send the file over to cheetera
+21. Send the file over to cheetera
 ```
 scp board_32x32.zip alex@cheetara.microlab.ntua.gr:~/Desktop/
 ```
-19. Connect to cheetara
+22. Connect to cheetara
 ```
 ssh alex@cheetara.microlab.ntua.gr
 ```
-20. Send files to versal
+23. Send files to versal
 ```
 scp ~/Desktop/board_32x32.zip root@192.168.1.51:~/astavropoulos/
 ```
-21. Connect to Versal 
+24. Connect to Versal 
 ```
 ssh root@192.168.1.51
 ```
-21. Get into my directory
+25. Get into my directory
 ```
 cd astavropoulos
 ```
-22. Unzip the zip
+26. Unzip the zip
 ```
 unzip board_32x32.zip
 ```
-23. Change to the board directory
+27. Change to the board directory
 ```
 cd board
 ```
-24. make _run_src.sh_
+28. make _run_src.sh_
 ```
 chmod +x run_src.sh
 ```
-25. Run the model
+29. Run the model
 ```
 ./run_src.sh vck190 resnet20CIFAR
 ```
