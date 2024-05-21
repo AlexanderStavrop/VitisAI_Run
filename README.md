@@ -60,6 +60,14 @@ cp -r ~/Desktop/board .
 ```
 cp resnet20CIFAR.xmodel board/cifar10/
 ```
+17. Create a test subdir in the cifar directory
+```
+cp -r dataset/cifar10/val board/cifar10/test
+```
+18. Make the test tar zip
+```
+tar -cvf test.tar dataset/cifar10/test/
+```
 17. Zip the board directory
 ```
 zip -r board_32x32.zip board/
