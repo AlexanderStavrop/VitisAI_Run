@@ -1,7 +1,7 @@
 # With scripts
 1. Run the first script (model directory - dataset - board test dataset - Docker)
 ```
-./automate_shit.sh 32
+./part_1.sh 32
 ```
 2. Activate conda
 ```
@@ -9,7 +9,7 @@ conda activate vitis-ai-pytorch
 ```
 3. Run the second script (Quantize and calibrate - Deploy - Process the xmodel - Unset and source the LD_LIBRARY_PATH - Finilize the model)
 ```
-./automate_shit_2.sh 32
+./part_2.sh 32
 ```
 
 # By the hand
