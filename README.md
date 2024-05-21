@@ -104,3 +104,13 @@ unzip board_32x32.zip
 ```
 cd board
 ```
+
+23. make _run_src.sh_
+```
+chmod +x run_src.sh
+```
+
+24. Run the model
+```
+./run_src.sh vck190 resnet20CIFAR
+```
