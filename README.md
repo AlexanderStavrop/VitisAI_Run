@@ -1,4 +1,4 @@
-1. Get into VitisA
+1. Get into VitisAI
 ```
 cd ~/Documents/VitisAI/Vitis-AI
 ```
@@ -45,7 +45,7 @@ python resnet20_cifar_vai.py --data_dir "dataset/cifar10" --model_dir "./" --bat
 unset LD_LIBRARY_PATH
 ```
 ```
-source $install_path/environment-setup-cortexa72-cortexa53-xilinx-linux
+source /home/vitis-ai-user/petalinux_sdk_2022.2/environment-setup-cortexa72-cortexa53-xilinx-linux
 ```
 
 11. Finilize the model
