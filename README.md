@@ -57,6 +57,10 @@ vai_c_xir -x quantize_result/CifarResNet_int.xmodel -a /opt/vitis_ai/compiler/ar
 
 13. Move it to the board directory
 ```
+cp resnet20CIFAR.xmodel board/cifar10/
+```
+14. 
+```
 zip -r board_32x32.zip board/
 ```
 
