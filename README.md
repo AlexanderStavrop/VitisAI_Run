@@ -1,6 +1,14 @@
-1. Get into VitisAI
+1. Get into VitisAI directory
 ```
 cd ~/Documents/VitisAI/Vitis-AI
+```
+2. Create a new directory for the model
+```
+cp ~/Desktop/tempalate models/ResNet20_32x32_fake
+```
+3. Create the cifar10 and test data
+```
+python3 image_generator.py
 ```
 2. Start the VitisAI docker image
 ```
