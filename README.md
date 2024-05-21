@@ -7,10 +7,11 @@
 ```
 conda activate vitis-ai-pytorch
 ```
-3. 
+3. Run the second script (Quantize and calibrate - Deploy - Process the xmodel - Unset and source the LD_LIBRARY_PATH - Finilize the model)
 ```
 ./automate_shit_2.sh 32
 ```
+
 # By the hand
 1. Get into VitisAI directory
 ```
