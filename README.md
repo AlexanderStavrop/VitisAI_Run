@@ -70,7 +70,7 @@ cd board/cifar10/
 ```
 19. Make the test tar zip
 ```
-tar -cvf test.tar board/cifar10/test
+tar -cvf test.tar test
 ```
 20. Move back to the main directory
 ```
