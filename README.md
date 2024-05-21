@@ -14,7 +14,7 @@ conda activate vitis-ai-pytorch
 
 6. Change to the target directory
 ```
-cd ResNet20
+cd models/ResNet20_
 ```
 
 7. Make sure the needed files are in the target directory
