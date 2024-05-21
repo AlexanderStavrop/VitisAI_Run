@@ -1,3 +1,7 @@
+# With scripts
+1. Run the first script (model directory - dataset - board test dataset - Docker)
+
+# By the hand
 1. Get into VitisAI directory
 ```
 cd ~/Documents/VitisAI/Vitis-AI
