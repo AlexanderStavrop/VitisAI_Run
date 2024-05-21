@@ -55,47 +55,52 @@ vai_c_xir -x quantize_result/CifarResNet_int.xmodel -a /opt/vitis_ai/compiler/ar
 
 12. Make sure there exists a _resnet20CIFAR.xmodel_ in the outer directory
 
-13. Move it to the board directory
+13. Exit
+```
+exit
+```
+
+14. Move it to the board directory
 ```
 cp resnet20CIFAR.xmodel board/cifar10/
 ```
-14. 
+
+15. Zip the board directory
 ```
 zip -r board_32x32.zip board/
 ```
 
-14. Send the file over to cheetera
+16. Send the file over to cheetera
 ```
 scp board_32x32.zip alex@cheetara.microlab.ntua.gr:~/Desktop/
 ```
 
-15. Connect to cheetara
+17. Connect to cheetara
 ```
 ssh alex@cheetara.microlab.ntua.gr
 ```
 
-16. Send files to versal
+18. Send files to versal
 ```
 scp ~/Desktop/board_32x32.zip root@192.168.1.51:~/astavropoulos/
 ```
 
-15. Connect to Versal 
+19. Connect to Versal 
 ```
 ssh root@192.168.1.51
 ```
 
-16. Get into my directory
+20. Get into my directory
 ```
 cd astavropoulos
 ```
 
-17. Unzip the zip
+21. Unzip the zip
 ```
 unzip board_32x32.zip
 ```
 
-18. Change to the board directory
+22. Change to the board directory
 ```
 cd board
 ```
-
