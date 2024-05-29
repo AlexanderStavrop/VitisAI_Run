@@ -19,6 +19,32 @@ Exit
 ```
 ./part_3.sh 64
 ```
+6. Move inside the working directory
+```
+cd models/ResNet20_32x32_fake/
+```
+7. Send the zip to cheetera
+```
+scp board_32x32.zip alex@cheetara.microlab.ntua.gr:~/Desktop/
+```
+8. ssh to cheetara
+```
+ssh alex@cheetara.microlab.ntua.gr
+```
+9. Send the zip to Versal
+```
+scp ~/Desktop/board_32x32.zip root@192.168.1.87:~/astavropoulos/
+```
+10. ssh to Versal
+```
+ssh root@192.168.1.87
+```
+11. Unzip the zip, run the script and print the results
+```
+./part_4.sh
+```
+
+
 # By the hand
 1. Get into VitisAI directory
 ```
