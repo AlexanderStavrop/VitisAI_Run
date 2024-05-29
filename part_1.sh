@@ -12,7 +12,7 @@ dimension=$1
 
 ################################################################################ 1
 # Define the source and destination paths with the variable
-source_path="~/Desktop/template/"
+source_path="models/template/"
 destination_path="models/ResNet20_${dimension}x${dimension}_fake"
 
 # Copy the template directory to the desired location
