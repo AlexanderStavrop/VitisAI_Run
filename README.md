@@ -41,7 +41,7 @@ ssh root@192.168.1.87
 ```
 11. Unzip the zip, run the script and print the results
 ```
-./part_4.sh
+./astavropoulos/part_4.sh 64
 ```
 
 
