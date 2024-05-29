@@ -24,7 +24,6 @@ fi
 
 ################################################################################ 2
 # Define the source and destination paths with the variable
-source_path="~/Desktop/template/"
 destination_path="models/ResNet20_${dimension}x${dimension}_fake"
 
 # Coping the xmodel to the board directory

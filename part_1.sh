@@ -17,7 +17,7 @@ destination_path="models/ResNet20_${dimension}x${dimension}_fake"
 
 # Copy the template directory to the desired location
 echo "Copying template directory to $destination_path..."
-cp -r ~/Desktop/template/ "$destination_path"
+cp -r "$source_path" "$destination_path"
 if [ $? -ne 0 ]; then
     echo "Failed to copy template directory. Exiting."
     exit 1

@@ -72,7 +72,7 @@ if __name__ == "__main__":
 
     if dimensions != 32:
         # Define the new maxpooling function string
-        new_maxpool_function = "\t\t\t\tself.maxpool = nn.MaxPool2d(kernel_size={}, stride={})".format(int(dimensions/32), int(dimensions/32))
+        new_maxpool_function = "        self.maxpool = nn.MaxPool2d(kernel_size={}, stride={})".format(int(dimensions/32), int(dimensions/32))
 
         # Replace the line containing the target word with the new maxpooling function
         replace_line_containing_word(main_directory + "resnet20_cifar_vai.py", "self.maxpool = nn.MaxPool2d", new_maxpool_function)

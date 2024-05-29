@@ -320,12 +320,12 @@ void run_CNN(vart::Runner* runner) {
     double average_time = total_time / load_image_time_data.size();
 
     // Define the file path
-    std::string filename = "../../time_measurements_" + std::to_string(input_height) + "x" +  std::to_string(input_width) + ".txt";
+    std::string filename = "../../time_measurements.txt";
 
     // Open the file
     FILE* filePtr = fopen(filename.c_str(), "a");
     if (filePtr != nullptr) {
-        fprintf(filePtr, "Test for %dx%d", input_height, input_width);
+        fprintf(filePtr, "Test for %dx%d\n", input_height, input_width);
         // Write to the file using fprintf
         fprintf(filePtr, "Average load image time %.6f seconds (With min: %.6f seconds, Max: %.6f seconds)\n", average_time, min_time, max_time);
         fprintf(filePtr, "Total execution time: %.6f seconds\n", total_exec_time.count());
