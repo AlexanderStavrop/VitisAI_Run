@@ -11,7 +11,14 @@ conda activate vitis-ai-pytorch
 ```
 ./part_2.sh 32
 ```
-
+4. Exit the docker
+```
+Exit
+```
+5. Move the xmodel to the board directory and zip it.
+```
+./part_3.sh 64
+```
 # By the hand
 1. Get into VitisAI directory
 ```
