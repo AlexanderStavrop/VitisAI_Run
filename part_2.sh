@@ -4,14 +4,16 @@
 # Check if the correct number of arguments is provided
 if [ "$#" -ne 1 ]; then
     echo "Usage: $0 <dimension>"
+    echo "  <dimension>: The dimension for the images."
     exit 1
 fi
 
-# Store the input argument in a variable
+# Store the input arguments in variables
 dimension=$1
 
 ################################################################################ 1
-destination_path="models/ResNet20_${dimension}x${dimension}_fake"
+# Define the source and destination paths with the variables
+destination_path="models/ResNet20_${dimension}x${dimension}_random"
 
 # Change directory to the destination path
 echo "Changing directory to $destination_path..."

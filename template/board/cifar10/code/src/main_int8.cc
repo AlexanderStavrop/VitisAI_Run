@@ -122,19 +122,6 @@ void CPUCalcSoftmax(const int8_t* data, size_t size, float* result, float scale)
     result[i] /= sum;
 }
 
-void ArgMax(const int8_t* data,  size_t size, float *res_val, int *res_index, float scale) {
-    int index = 0;
-    int8_t max = data[0];
-    for (size_t i = 1; i < size; i++) {
-        if (data[i] > max) {
-            max = data[i];
-            index = i;
-        }
-    }
-    *res_val   = (float) (max * scale);
-    *res_index = index;
-}
-
 /**
 * @brief Get top k results according to its probability
 *
@@ -159,6 +146,28 @@ void TopK(const float* d, int size, int k, vector<string>& vkinds) {
   }
 }
 
+void extract_statistics(const std::vector<std::chrono::duration<double>>& times_vector, double metrics[][4], int test_index) {
+    double total_time = 0.0;
+    double min_time = std::numeric_limits<double>::max(); // Initialize min_time to a large value
+    double max_time = std::numeric_limits<double>::min(); // Initialize max_time to a small value
+
+    for (const auto& time : times_vector) {
+        double time_sec = time.count(); // Convert duration to seconds
+        
+        // Update total_time
+        total_time += time_sec;
+
+        // Update min_time and max_time
+        if (time_sec < min_time) min_time = time_sec;
+        if (time_sec > max_time) max_time = time_sec;
+    }
+    double average_time = total_time / times_vector.size();
+
+    metrics[test_index][0] = total_time;
+    metrics[test_index][1] = average_time;
+    metrics[test_index][2] = min_time;
+    metrics[test_index][3] = max_time;
+}
 
 /**
 * @brief Run DPU Task for CNN
@@ -225,8 +234,10 @@ void run_CNN(vart::Runner* runner) {
     // MIGHT NOT BE NEEDED
     int input_height, input_width;
 
-    // Creating an array for storring the time needed to load every image
+    // Creating an array for storring the time data
     std::vector<std::chrono::duration<double>> load_image_time_data;
+    std::vector<std::chrono::duration<double>> pre_process_time_data;
+    std::vector<std::chrono::duration<double>> cnn_run_time_data;
 
     // Starging a timer for measuring total execution time
     auto total_exec_time_start = std::chrono::high_resolution_clock::now();
@@ -238,28 +249,26 @@ void run_CNN(vart::Runner* runner) {
         out_dims[0] = batchSize;
 
         for (unsigned int i = 0; i < runSize; i++) {
-            // Starging a timer for measuring image load time
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Image load starts here
+            // Starging a timer and loading the image to the RAM
             auto load_image_time_start = std::chrono::high_resolution_clock::now();
-
-            // Loading the image on RAM
             Mat image = imread(baseImagePath + images[n + i]);
-
-            // Ending the timer for measuring image load time
             auto load_image_time_end = std::chrono::high_resolution_clock::now();
 
             // Calculating the time needed to load the image and appending them to the vector
-            load_image_time_data.push_back(std::chrono::duration_cast<std::chrono::duration<double>>(load_image_time_end - load_image_time_start));
+            std::chrono::duration<double> load_image_time = load_image_time_end - load_image_time_start;
+            load_image_time_data.push_back(load_image_time);
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Image load ends here
 
-            // for debug
-//             cout << "Original Image Dimensions - Width: " << image.cols << ", Height: " << image.rows << ", Channels: " << image.channels() << endl;
+            // Updating the image row and columns
             input_height = image.rows;
             input_width = image.cols;
 
-            // Performing image pre-process
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Image pre-process starts here
+            // Starting a timer and performing image pre-process
+            auto pre_process_time_start = std::chrono::high_resolution_clock::now();
             Mat image2 = cv::Mat(inHeight, inWidth, CV_8SC3);
             resize(image, image2, Size(inHeight, inWidth), 0, 0, INTER_NEAREST);
-            // For debug
-//             printf("inHeight = %d\ninWidth = %d\n", inHeight, inWidth);
 
             for (int h = 0; h < inHeight; h++) {
                 for (int w = 0; w < inWidth; w++) {
@@ -267,7 +276,13 @@ void run_CNN(vart::Runner* runner) {
                         imageInputs[i*inSize+h*inWidth*3+w*3 +2-c] = (int8_t)( ( (image2.at<Vec3b>(h, w)[c]/255.0f - mean[2-c] ) /std_dev[2-c] ) *input_scale );
                 }
             }
-        imageList.push_back(image);
+            auto pre_process_time_end = std::chrono::high_resolution_clock::now();
+
+            // Calculating the time needed to pre-process the image and appending them to the vector
+            std::chrono::duration<double> pre_process_time = pre_process_time_end - pre_process_time_start;
+            pre_process_time_data.push_back(pre_process_time);
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Image pre-process ends here
+            imageList.push_back(image);
         }
 
         // in/out tensor refactory for batch inout/output
@@ -282,13 +297,18 @@ void run_CNN(vart::Runner* runner) {
         inputsPtr.push_back(inputs[0].get());
         outputsPtr.push_back(outputs[0].get());
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Running the model starts here
         // Running on the model
+        auto cnn_run_time_start = std::chrono::high_resolution_clock::now();
         auto job_id = runner->execute_async(inputsPtr, outputsPtr);
         runner->wait(job_id.first, -1);
-        for (unsigned int i = 0; i < runSize; i++) {
-            // For debug
-//             cout << "\nImage : " << images[n + i] << endl;
+        auto cnn_run_time_end = std::chrono::high_resolution_clock::now();
 
+        // Calculating the time needed to run the cnn and appending them to the vector
+        std::chrono::duration<double> cnn_run_time = cnn_run_time_end - cnn_run_time_start;
+        cnn_run_time_data.push_back(cnn_run_time);
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Running the model ends here
+        for (unsigned int i = 0; i < runSize; i++) {
             // Calculating the softmax on CPU and display TOP-5 classification results
             CPUCalcSoftmax(&FCResult[i * outSize], outSize, softmax,  output_scale);
             TopK(softmax, outSize, 5, kinds);
@@ -301,34 +321,31 @@ void run_CNN(vart::Runner* runner) {
     auto total_exec_time_end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> total_exec_time = total_exec_time_end - total_exec_time_start;
 
-    double total_time = 0.0;
-    double min_time = std::numeric_limits<double>::max(); // Initialize min_time to a large value
-    double max_time = std::numeric_limits<double>::min(); // Initialize max_time to a small value
-
-    for (const auto& time : load_image_time_data) {
-        double time_sec = time.count(); // Convert duration to seconds
-        total_time += time_sec;
-
-        // Update min_time and max_time
-        if (time_sec < min_time) {
-            min_time = time_sec;
-        }
-        if (time_sec > max_time) {
-            max_time = time_sec;
-        }
-    }
-    double average_time = total_time / load_image_time_data.size();
-
+    double metrics[3][4] = {0};
+    extract_statistics(load_image_time_data, metrics, 0);
+    extract_statistics(pre_process_time_data, metrics, 1);
+    extract_statistics(cnn_run_time_data, metrics, 2);
+    
     // Define the file path
     std::string filename = "../../time_measurements.txt";
 
     // Open the file
     FILE* filePtr = fopen(filename.c_str(), "a");
     if (filePtr != nullptr) {
+        fprintf(filePtr, "***********************************************************************************************************\n");
         fprintf(filePtr, "Test for %dx%d\n", input_height, input_width);
-        // Write to the file using fprintf
-        fprintf(filePtr, "Average load image time %.6f seconds (With min: %.6f seconds, Max: %.6f seconds)\n", average_time, min_time, max_time);
-        fprintf(filePtr, "Total execution time: %.6f seconds\n", total_exec_time.count());
+        fprintf(filePtr, "Total number of images: %d\n\n", images.size());
+
+        fprintf(filePtr, "Load image time:\n");
+        fprintf(filePtr, "Total time: %f, Average time: %f, Min time: %f, Max time: %f\n\n", metrics[0][0], metrics[0][1], metrics[0][2], metrics[0][3]);
+
+        fprintf(filePtr, "Pre-process time:\n");
+        fprintf(filePtr, "Total time: %f, Average time: %f, Min time: %f, Max time: %f\n\n", metrics[1][0], metrics[1][1], metrics[1][2], metrics[1][3]);
+
+        fprintf(filePtr, "CNN run time:\n");
+        fprintf(filePtr, "Total time: %f, Average time: %f, Min time: %f, Max time: %f\n\n", metrics[2][0], metrics[2][1], metrics[2][2], metrics[2][3]);
+
+        fprintf(filePtr, "Total execution time: %f\n", total_exec_time.count());
         fprintf(filePtr, "***********************************************************************************************************\n\n");
 
         // Close the file
@@ -336,7 +353,6 @@ void run_CNN(vart::Runner* runner) {
     } else {
         cerr << "Error: Unable to open file for writing" << endl;
     }
-
     delete[] FCResult;
     delete[] imageInputs;
     delete[] softmax;

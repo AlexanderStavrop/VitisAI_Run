@@ -68,18 +68,27 @@ def replace_line_containing_word(file_path, target_word, replacement):
 
 if __name__ == "__main__":
     dimensions = int(sys.argv[1])
-    main_directory = "models/ResNet20_" + str(dimensions) + "x" + str(dimensions) + "_fake/"
+    main_directory = "models/ResNet20_" + str(dimensions) + "x" + str(dimensions) + "_random/"
 
     if dimensions != 32:
+        ## Define the new maxpooling function string
+        #new_avgpool_function = "        self.avgpool_1 = nn.AvgPool2d(kernel_size={}, stride={})".format(int(dimensions/32), int(dimensions/32))
+        ## Replace the line containing the target word with the new maxpooling function
+        #replace_line_containing_word(main_directory + "resnet20_cifar_vai.py", "self.avgpool_1 = nn.AvgPool2d", new_avgpool_function)
+
         # Define the new maxpooling function string
         new_maxpool_function = "        self.maxpool = nn.MaxPool2d(kernel_size={}, stride={})".format(int(dimensions/32), int(dimensions/32))
-
         # Replace the line containing the target word with the new maxpooling function
         replace_line_containing_word(main_directory + "resnet20_cifar_vai.py", "self.maxpool = nn.MaxPool2d", new_maxpool_function)
 
 
+        new_input_size = "  input = torch.randn([batch_size, 3, {}, {}])".format(int(dimensions), int(dimensions))
+        # Replace the line containing the target word with the new maxpooling function
+        replace_line_containing_word(main_directory + "resnet20_cifar_vai.py", "input = torch.randn([batch_size", new_input_size)
+
+
     classes = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
-    num_of_images = 1000
+    num_of_images = 10
 
     # Creating the datasets
     create_cifar10(classes, num_of_images, dimensions, main_directory + "dataset/cifar10/val/")

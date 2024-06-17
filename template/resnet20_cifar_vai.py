@@ -118,13 +118,12 @@ class CifarResNet(nn.Module):
 
     def __init__(self, block, layers, num_classes=10):
         super(CifarResNet, self).__init__()
+        self.maxpool = nn.MaxPool2d(kernel_size=2, stride=2)
+
         self.inplanes = 16
         self.conv1 = conv3x3(3, 16)
         self.bn1 = nn.BatchNorm2d(16)
         self.relu = nn.ReLU(inplace=True)
-
-        # Change the input size to match 64x64 images
-        self.maxpool = nn.MaxPool2d(kernel_size=2, stride=2)
 
         self.layer1 = self._make_layer(block, 16, layers[0])
         self.layer2 = self._make_layer(block, 32, layers[1], stride=2)
@@ -156,13 +155,12 @@ class CifarResNet(nn.Module):
 
         return nn.Sequential(*layers)
     def forward(self, x):
-        x = self.conv1(x)
-        x = self.bn1(x)
-        x = self.relu(x)
-
         # Apply max pooling
         x = self.maxpool(x)
 
+        x = self.conv1(x)
+        x = self.bn1(x)
+        x = self.relu(x)
 
         x = self.layer1(x)
         x = self.layer2(x)
